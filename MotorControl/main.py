@@ -1,12 +1,21 @@
 import socket
 import pigpio
 import netifaces as ni
-import time
+from time import time, sleep
 from math import ceil
+import sys
 
 from servo import Servo
 from properties import properties
 print(properties)
+
+timestamp=False
+verbose=False
+for argument in sys.argv:
+    if argument == '-v':
+        verbose=True
+    elif argument == '-t':
+        timestamp=True
 
 #Remember: launch pigpio daemon (sudo pigpiod)
 
@@ -29,25 +38,34 @@ pan = Servo(pi, properties['pan_pin'], properties['starting_position'],
             properties['min_position'], properties['max_position'],
             properties['invert_x'])
 
-time.sleep(1)
+sleep(1)
 
 
 def fetchPacket():
-    if properties['verbose']:
+    if verbose:
         print("waiting on packet")
     data, addr = sock.recvfrom(properties['buffer_size'])
     values = list()
     for i in range(0, len(data), 4):
         values.append(int.from_bytes(data[i:i+4], byteorder='big', signed=True))
-    if properties['verbose']:
+    if verbose:
         print("packet received :"+str(values))
     return values
 
 def moveServos(values):
-    global pan
-    pan.moveTo(values[0])
-    time.sleep(properties['motor_delay'])
+    pan.moveTo(pi, values[0])
+    sleep(properties['motor_delay'])
 
-while True:
-    values = fetchPacket()
-    moveServos(values)
+if timestamp:
+    while True:
+        values = fetchPacket()
+        values_timestamp = time()
+        print("values fetched at "+str(values_timestamp))
+        moveServos(values)
+        servos_timestamp = time()
+        print("servos moved at "+str(servos_timestamp))
+        print("TOTAL TIME = "+str(servos_timestamp-values_timestamp))
+else:    
+    while True:
+        values = fetchPacket()
+        moveServos(values)

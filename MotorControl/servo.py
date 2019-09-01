@@ -7,13 +7,13 @@ class Servo:
         self.minPosition = minPos
         self.inverted = inverted
         
-    def applyInversion(change):
+    def applyInversion(self, change):
         if self.inverted:
             return -change
         return change
         
     def moveTo(self, pi, change):
-        newPosition = self.position + applyInversion(change)
+        newPosition = self.position + self.applyInversion(change)
         if newPosition <= self.maxPosition and newPosition >= self.minPosition:
             self.position = newPosition
             pi.set_servo_pulsewidth(self.pin, self.position)
