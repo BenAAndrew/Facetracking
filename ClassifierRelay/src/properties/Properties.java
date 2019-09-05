@@ -23,4 +23,12 @@ public class Properties {
 	public String getClassifier() {
 		return prop.getProperty("classfier");
 	}
+	
+	public float getXSensitivity() {
+		return Float.valueOf(prop.getProperty("x_sensitivity"));
+	}
+	
+	public float getYSensitivity() {
+		return Float.valueOf(prop.getProperty("y_sensitivity"));
+	}
 }

@@ -15,7 +15,7 @@ public class PacketHandler {
 	private DatagramSocket socket;
 	private InetAddress address;
 	
-	private static int[] TEST_VALUES = {-1,1};
+	private static int[] TEST_VALUES = {0,0};
 	
 	public PacketHandler(Properties prop) {
 		this.ip = prop.getStreamIp();

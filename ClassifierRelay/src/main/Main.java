@@ -27,7 +27,7 @@ public class Main {
 		imageClassifier = new ImageClassifier(prop);
 		packetHandler = new PacketHandler(prop);
 		stream = new Stream(prop);
-		classifyStream = new ClassifyStream(imageClassifier, packetHandler, stream);
+		classifyStream = new ClassifyStream(prop, imageClassifier, packetHandler, stream);
 		timestamper = new Timestamper(imageClassifier, packetHandler, classifyStream, stream);
 		
 		System.out.println("LISTENING TO: "+prop.getStreamAddress());
