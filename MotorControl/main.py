@@ -1,6 +1,5 @@
 import pigpio
 from time import time, sleep
-from math import ceil
 import sys
 
 from servo import Servo
@@ -8,6 +7,7 @@ from packet_handler import PacketHandler
 from properties import properties
 print(properties)
 
+#Command line arguments
 timestamp=False
 verbose=False
 for argument in sys.argv:
@@ -18,7 +18,7 @@ for argument in sys.argv:
 
 #Remember: launch pigpio daemon (sudo pigpiod)
 
-#declarre packetHandler
+#declare packetHandler
 packetHandler = PacketHandler(verbose)
 
 #declare pigpio
@@ -29,6 +29,7 @@ pan = Servo(pi, properties['pan_pin'], properties['starting_position'],
             properties['min_position'], properties['max_position'],
             properties['invert_x'])
 
+#allow servos a second to connect
 sleep(1)
 
 def moveServos(values):
