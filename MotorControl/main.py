@@ -1,11 +1,10 @@
-import socket
 import pigpio
-import netifaces as ni
 from time import time, sleep
 from math import ceil
 import sys
 
 from servo import Servo
+from packet_handler import PacketHandler
 from properties import properties
 print(properties)
 
@@ -19,16 +18,8 @@ for argument in sys.argv:
 
 #Remember: launch pigpio daemon (sudo pigpiod)
 
-#Get IP
-def getIP():
-    nic = 'eth0'
-    if properties['wireless']:
-        nic = 'wlan0'
-    return ni.ifaddresses(nic)[ni.AF_INET][0]['addr']
-    
-#UDP setup
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
-sock.bind((getIP(), properties['port'])) 
+#declarre packetHandler
+packetHandler = PacketHandler(verbose)
 
 #declare pigpio
 pi = pigpio.pi()
@@ -40,25 +31,13 @@ pan = Servo(pi, properties['pan_pin'], properties['starting_position'],
 
 sleep(1)
 
-
-def fetchPacket():
-    if verbose:
-        print("waiting on packet")
-    data, addr = sock.recvfrom(properties['buffer_size'])
-    values = list()
-    for i in range(0, len(data), 4):
-        values.append(int.from_bytes(data[i:i+4], byteorder='big', signed=True))
-    if verbose:
-        print("packet received :"+str(values))
-    return values
-
 def moveServos(values):
     pan.moveTo(pi, values[0])
     sleep(properties['motor_delay'])
 
 if timestamp:
     while True:
-        values = fetchPacket()
+        values = packetHandler.fetchPacket()
         values_timestamp = time()
         print("values fetched at "+str(values_timestamp))
         moveServos(values)
@@ -67,5 +46,5 @@ if timestamp:
         print("TOTAL TIME = "+str(servos_timestamp-values_timestamp))
 else:    
     while True:
-        values = fetchPacket()
+        values = packetHandler.fetchPacket()
         moveServos(values)
