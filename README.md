@@ -1,6 +1,4 @@
 # Facetracking - Raspberry Pi IoT System
-
-# Introduction
 This project is designed to cover the process of creating a simple processing system for IoT solutions, and how to create a real time face tracking system. 
 
 The end goal of this was to take an Inmoov head (http://inmoov.fr/head-3/) and make it watch people in real time by tracking their face and moving servos to fix on their face (a bit creepy but why not).
@@ -37,4 +35,14 @@ when in the <b>MotorControl</b> folder. This installs two libraries;
 <ul>
   <li><b>netifaces: </b>Used to get the devices IP</li>
   <li><b>pigpio: </b>Used to interact with the servos though the raspberry pi's GPIO pins</li>
+</ul>
+
+# Raspberry Pi code
+Now you're setup I'll briefly explain the code.
+<ul>
+  <li><b>main.py: </b>The main file for the python code which is responsible for; 
+    <ul>
+      <li>TODO</li>
+    </ul>
+  </li>
 </ul>
